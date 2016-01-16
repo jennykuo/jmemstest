@@ -1,0 +1,47 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2014.01.14.20.22.39;	author root;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2011.03.01.16.44.04;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@aas5->tartini
+bjs
+@
+
+
+1.2
+log
+@edited database server from tartini to dev-weiss
+@
+text
+@<?php
+$dbhost = 'dev-weiss.trinity.duke.edu';
+$dbuser = 'jmems';
+$dbpass = 'j)uRn4';
+$dbname = 'mydb';
+?> 
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 1
+a2 1
+$dbhost = 'tartini.aas.duke.edu';
+@

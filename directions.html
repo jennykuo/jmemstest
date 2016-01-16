@@ -1,0 +1,215 @@
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="JMEMS Journal of Medieval and Early Modern Studies Duke University">
+  <TITLE>JMEMS Homepage</TITLE>
+  <link href="style/pastIssues.css" rel="stylesheet" type="text/css">  
+</HEAD>
+<body>
+<div id="abstract2">
+<p>
+        The JMEMS search uses full-text database search capabilities.  The boolean full-text search capability supports the following
+        operators:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<p>
+            <code class="literal">*</code>
+
+          </p>
+<p>
+            The asterisk serves as the truncation (or wildcard)
+            operator. Unlike the other operators, it should be
+            <span class="emphasis"><em>appended</em></span> to the word to be affected.
+            Words match if they begin with the word preceding the
+            <code class="literal">*</code> operator.
+          </p>
+</li>
+<li>
+<p>
+            <code class="literal">"</code>
+
+          </p>
+<p>
+            A phrase that is enclosed within double quote
+            (‘<code class="literal">"</code>’) characters matches only
+            rows that contain the phrase <span class="emphasis"><em>literally, as it was
+            typed</em></span>. 
+            If the phrase contains no words that are in the index, the
+            result is empty. 
+          </p>
+</li>
+
+<li>
+<p>
+            <code class="literal">+</code>
+          </p>
+<p>
+            A leading plus sign indicates that this word
+            <span class="emphasis"><em>must</em></span> be present in each row that is
+            returned.
+          </p>
+</li>
+<li>
+<p>
+
+            <code class="literal">-</code>
+          </p>
+<p>
+            A leading minus sign indicates that this word must
+            <span class="emphasis"><em>not</em></span> be present in any of the rows that
+            are returned.
+          </p>
+<p>
+            Note: The <code class="literal">-</code> operator acts only to exclude
+            rows that are otherwise matched by other search terms. Thus,
+            a boolean-mode search that contains only terms preceded by
+            <code class="literal">-</code> returns an empty result. It does not
+            return “<span class="quote">all rows except those containing any of the
+            excluded terms.</span>”
+          </p>
+
+</li>
+
+<li>
+<p>
+            <code class="literal">&gt; &lt;</code>
+          </p>
+<p>
+            These two operators are used to change a word's contribution
+            to the relevance value that is assigned to a row. The
+            <code class="literal">&gt;</code> operator increases the contribution
+            and the <code class="literal">&lt;</code> operator decreases it. See
+            the example following this list.
+          </p>
+</li>
+
+<li>
+<p>
+            <code class="literal">( )</code>
+          </p>
+<p>
+            Parentheses group words into subexpressions. Parenthesized
+            groups can be nested.
+          </p>
+</li>
+<li>
+<p>
+            <code class="literal">~</code>
+
+          </p>
+<p>
+            A leading tilde acts as a negation operator, causing the
+            word's contribution to the row's relevance to be negative.
+            This is useful for marking “<span class="quote">noise</span>” words. A row
+            containing such a word is rated lower than others, but is
+            not excluded altogether, as it would be with the
+            <code class="literal">-</code> operator.
+          </p>
+</li>
+
+</ul></div>
+<p>
+        The following examples demonstrate some search strings that use
+        boolean full-text operators:
+      </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<p>
+            <code class="literal">'apple*'</code>
+          </p>
+<p>
+            Find rows that contain words such as “<span class="quote">apple</span>”,
+            “<span class="quote">apples</span>”, “<span class="quote">applesauce</span>”, or
+            “<span class="quote">applet</span>”.
+          </p>
+
+</li>
+<li>
+<p>
+            <code class="literal">'"some words"'</code>
+          </p>
+<p>
+            Find rows that contain the exact phrase “<span class="quote">some
+            words</span>” (for example, rows that contain “<span class="quote">some
+            words of wisdom</span>” but not “<span class="quote">some noise
+            words</span>”). Note that the
+            ‘<code class="literal">"</code>’ characters that enclose
+            the phrase are operator characters that delimit the phrase.
+            They are not the quotes that enclose the search string
+            itself.
+          </p>
+
+</li>
+<li>
+<p>
+            <code class="literal">'apple banana'</code>
+          </p>
+
+<p>
+            Find rows that contain at least one of the two words.
+          </p>
+</li>
+<li>
+<p>
+            <code class="literal">'+apple +juice'</code>
+          </p>
+<p>
+            Find rows that contain both words.
+          </p>
+</li>
+
+<li>
+<p>
+            <code class="literal">'+apple macintosh'</code>
+          </p>
+<p>
+            Find rows that contain the word “<span class="quote">apple</span>”, but
+            rank rows higher if they also contain
+            “<span class="quote">macintosh</span>”.
+          </p>
+</li>
+<li>
+
+<p>
+            <code class="literal">'+apple -macintosh'</code>
+          </p>
+<p>
+            Find rows that contain the word “<span class="quote">apple</span>” but not
+            “<span class="quote">macintosh</span>”.
+          </p>
+</li>
+<li>
+<p>
+
+            <code class="literal">'+apple ~macintosh'</code>
+          </p>
+<p>
+            Find rows that contain the word “<span class="quote">apple</span>”, but if
+            the row also contains the word “<span class="quote">macintosh</span>”,
+            rate it lower than if row does not. This is
+            “<span class="quote">softer</span>” than a search for <code class="literal">'+apple
+            -macintosh'</code>, for which the presence of
+            “<span class="quote">macintosh</span>” causes the row not to be returned
+            at all.
+          </p>
+
+</li>
+<li>
+<p>
+            <code class="literal">'+apple +(&gt;turnover &lt;strudel)'</code>
+          </p>
+<p>
+            Find rows that contain the words “<span class="quote">apple</span>” and
+            “<span class="quote">turnover</span>”, or “<span class="quote">apple</span>” and
+            “<span class="quote">strudel</span>” (in any order), but rank “<span class="quote">apple
+            turnover</span>” higher than “<span class="quote">apple strudel</span>”.
+          </p>
+
+</li>
+
+</ul>
+
+Directions adapted from the MySQL reference manual,and can be found in the original <a href=http://dev.mysql.com/doc/refman/5.0/en/fulltext-boolean.html>here</a>.
+</div>
+</BODY>
+</HTML>

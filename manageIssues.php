@@ -1,0 +1,282 @@
+<?php
+
+	  // #############   START PHP  ####################
+
+/*
+  Copyright (c) 2004 Duke University
+  Author: Justin Leonard
+  Released under the GNU General Public License
+*/
+
+  require('includes/application_top.php');
+  require('includes/database.php');  
+  session_start();
+ function assert_handler($file, $line, $code)
+  {
+  ?>
+  <html> 
+   <head> 
+   <script language="JavaScript"> 
+   <!-- 
+       alert('You do not have Administrative Privileges to Manage Issues'); 
+       history.back(); 
+   //--> 
+   </script> 
+   </head> 
+   <body>
+	</body> 
+   </html> 
+   <?php 
+   exit; 
+  }
+  assert_options(ASSERT_CALLBACK, 'assert_handler');
+  assert($_SESSION["sessionUser"] == SITE_MANAGEMENT_USERNAME); 
+
+  if (isset($_POST['action']) && ($_POST['action'] == 'processDeleteIssues')) {
+		$issueIDs = split('@',$_POST["issuesToDelete"]);
+		foreach($issueIDs as $issueID)
+			tep_db_query("DELETE FROM issues WHERE ID='" . mysql_real_escape_string($issueID) . "'");						
+  }
+  
+  if (isset($_POST['action']) && ($_POST['action'] == 'processEditIssue')) {
+		$issue = split('@',$_POST["issueToEdit"]);
+		$issueID = mysql_real_escape_string($issue[0]);	  
+		$issueVolume = mysql_real_escape_string($issue[1]);
+		$issueNumber = mysql_real_escape_string($issue[2]); 
+		$issueSeason = mysql_real_escape_string($issue[3]); 		
+		$issueYear = mysql_real_escape_string($issue[4]); 
+		$issueTitle = tep_db_prepare_input($issue[5]); 
+		$issueEditors = tep_db_prepare_input($issue[6]); 
+		tep_db_query("UPDATE issues Set Volume='" . $issueVolume . "', IssueNumber='" . $issueNumber . "', IssueSeason='" . $issueSeason . "', Year='" . $issueYear . "', Title='" . $issueTitle . "', Editors='" . $issueEditors . "' WHERE ID='" . $issueID . "'");		
+	}
+	
+  if (isset($_POST['action']) && ($_POST['action'] == 'processAddIssue')) {
+		$issue = split('@',$_POST["issueToAdd"]);  
+		$issueVolume = mysql_real_escape_string($issue[0]);
+		$issueNumber = mysql_real_escape_string($issue[1]); 
+		$issueSeason = mysql_real_escape_string($issue[2]); 		
+		$issueYear = mysql_real_escape_string($issue[3]); 
+		$issueTitle = tep_db_prepare_input($issue[4]); 
+		$issueEditors = tep_db_prepare_input($issue[5]); 
+		tep_db_query("INSERT INTO issues (Volume,IssueNumber,IssueSeason,Year,Title,Editors) VALUES('" . $issueVolume . "','" . $issueNumber . "','" . $issueSeason . "','" . $issueYear . "','" . $issueTitle . "','" . $issueEditors . "')");
+	}	
+
+
+	  // #############   END PHP  ####################
+?>
+<!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="JMEMS Journal of Medieval and Early Modern Studies Duke University">
+  <TITLE>JMEMS Homepage</TITLE>
+	<link href="../style/stylesheet.css" rel="stylesheet" type="text/css">
+<script language="javascript">
+var issues = new Array();
+var selectedIssueID = 0;
+
+function deleteOnDelete(keyStroke)// event appears to be passed by Mozilla 
+{
+	var characterCode = (document.layers) ? keyStroke.which : event.keyCode;
+	if(characterCode == 46){ //if generated character code is equal to ascii 127 (if delete key)
+		deleteSelectedIssues();
+	}
+}
+
+function loadIssueForEdit()
+{
+	var mySelect = document.getElementById('issueSelect');
+	selectedIssueID = mySelect.options[mySelect.selectedIndex].value;
+	document.getElementById('issueVolume').value = issues[selectedIssueID]['Volume'];
+	document.getElementById('issueNumber').value = issues[selectedIssueID]['Number'];
+	document.getElementById('issueSeason').value = issues[selectedIssueID]['Season'];
+	document.getElementById('issueYear').value = issues[selectedIssueID]['Year'];
+	document.getElementById('issueTitle').value = issues[selectedIssueID]['Title'];
+	document.getElementById('issueEditors').value = issues[selectedIssueID]['Editors'];		
+}
+
+function editIssue()
+{
+	if(selectedIssueID) {
+		var div = document.getElementById('issueToEditDiv');
+		div.innerHTML = div.innerHTML + '<input name="issueToEdit" type="hidden" value="' + selectedIssueID + '@' + document.getElementById('issueVolume').value + '@' + document.getElementById('issueNumber').value + '@' + document.getElementById('issueSeason').value + '@' + document.getElementById('issueYear').value + '@' + document.getElementById('issueTitle').value + '@' + document.getElementById('issueEditors').value + '"/>';
+		document.getElementById('edit_issue_form').submit();	
+	}
+}
+
+function editArticles()
+{
+	if(selectedIssueID) window.location="manageArticles.php?issue=" + selectedIssueID;	
+}
+
+function addIssue()
+{
+	var div = document.getElementById('issueToAddDiv');
+	div.innerHTML = div.innerHTML + '<input name="issueToAdd" type="hidden" value="' + document.getElementById('issueVolume').value + '@' + document.getElementById('issueNumber').value + '@' + document.getElementById('issueSeason').value + '@' + document.getElementById('issueYear').value + '@' + document.getElementById('issueTitle').value + '@' + document.getElementById('issueEditors').value + '"/>';
+	document.getElementById('add_issue').submit();	
+}
+
+function deleteSelectedIssues()
+{
+	var mySelect = document.getElementById('issueSelect');
+	var div = document.getElementById('issuesToDeleteDiv');
+	var issuesToDelete = '';
+	for(var i=0; i < mySelect.options.length; i++)
+	{
+		if(mySelect.options[i].selected) issuesToDelete += mySelect.options[i].value + "@";
+	}
+	if(issuesToDelete != '')
+	{
+		issuesToDelete = issuesToDelete.substr(0,issuesToDelete.length-1);
+		div.innerHTML = div.innerHTML + '<input name="issuesToDelete" type="hidden" value="' + issuesToDelete + '"/>';
+		document.getElementById('delete_issues').submit();
+	}
+}
+document.onkeyup=deleteOnDelete;
+
+function sizePanes()
+{
+	document.getElementById('RightPane').style.height = document.getElementById('Main').style.height
+}
+</script>
+  <script src="../scripts/setupPage.js" language="JavaScript" type="text/javascript"></script>
+  <script>
+  var Level = 0;
+  </script>
+</HEAD>
+<body onLoad="sizePage();setMainColor(Level); sizePanes()" onResize="sizePage(); sizePanes()">
+<div id="Container"> 
+	<div id="LinkHeader">
+	  <a href="../index.php">
+	  <div id="Header">
+		<div id="Title">The Journal of<br>
+		  Medieval and Early Modern Studies</div>
+	  </div>	  
+	  </a>
+	 </div>
+  <div id="ContentPane"> 
+  	<div id="Main">
+      <div id="LeftPane"> 
+        <!-- body //-->
+        <!-- body_text //-->
+        <table>
+          <tr> 
+			<td><A HREF="index.php"><IMG SRC="../images/buttons/button_menu.gif" border="0"/></A></td>
+          </tr>
+          <tr> 
+            <td><b>Manage Issues</b></td>
+          </tr>
+        </table>
+        <?php
+	  
+	  
+	  
+	  // #############   START PHP  ####################
+	  
+	  
+	$patterns = array ("'([\r\n])[\s]+'",                // Strip out white space
+			 "/\s/",
+			   "/'/",
+			   "/\"/");
+	$replacement = array ("\\n",
+			 " ",
+			 "",
+			 "");
+			 	$issues = array();
+				$issues_query = tep_db_query("SELECT * FROM issues ORDER BY Volume DESC, IssueNumber ASC");
+				while($thisIssue = tep_db_fetch_array($issues_query))
+					array_push($issues,$thisIssue);
+			?>
+        <form ID="issueForm">
+          <SELECT ID="issueSelect" NAME="issueSelect" SIZE="20"
+				MULTIPLE WIDTH=200 STYLE="width: 200px" onChange="loadIssueForEdit()">
+            <?php 
+				foreach($issues as $issue)
+				{
+					echo '<option value="' . $issue['ID'] . '">' . $issue['Volume'] . "." . $issue['IssueNumber'] . ' (' . $issue['IssueSeason'] . ' ' . $issue['Year'] . ')<br/>';
+					?>
+            <script>
+						<?php echo "issues['" .  $issue['ID'] . "'] = new Array();issues['" .  $issue['ID'] . "']['Volume'] = '" . $issue['Volume'] . "';issues['" . $issue['ID'] . "']['Number'] = '" . $issue['IssueNumber'] . "';issues['" .  $issue['ID'] . "']['Season'] = '" . $issue['IssueSeason'] . "';issues['" .  $issue['ID'] . "']['Year'] = '" . $issue['Year'] . "';issues['" .  $issue['ID'] . "']['Title'] = '" . preg_replace($patterns,$replacement,$issue['Title']) . "';issues['" .  $issue['ID'] . "']['Editors'] = '" . preg_replace($patterns,$replacement,$issue['Editors']) . "';"; ?>
+						</script>
+            <?php
+				}
+				
+				
+				
+	  // #############   END PHP  ####################				
+				
+				
+				
+				
+			?>
+          </SELECT>
+        </form>
+			<form name="logout" action="index.php" method="post"><input type="hidden" name="action" value="processLogout">
+			<input type="image" src="../images/buttons/button_logout.gif" border="0" alt="Logout" title="Logout">
+			</form>		
+      </div>
+		
+      <div id="RightPane"> 
+        <form name="edit_issue" action="manageIssues.php" method="post">
+          <table>
+            <tr> 
+              <td>Volume</td>
+              <td ><input type="text" size="3" maxlength="3" name="issueVolume" id="issueVolume"></td>
+              <td></td>
+            </tr>
+            <tr> 
+              <td>Number</td>
+              <td ><input type="text" size="3" maxlength="3" name="issueNumber" id="issueNumber"></td>
+              <td></td>
+            </tr>
+            <tr> 
+              <td>Season</td>
+              <td><select name="issueSeason" id="issueSeason">
+                  <option value="January">January</option>
+                  <option value="May">May</option>
+                  <option value="September">September</option>
+                </select></td>
+              <td></td>
+            </tr>
+            <tr> 
+              <td>Year</td>
+              <td ><input type="text" size="4" maxlength="4" name="issueYear" id="issueYear"></td>
+              <td></td>
+            </tr>
+            <tr> 
+              <td>Title</td>
+              <td colspan="2"><input type="text" name="issueTitle" id="issueTitle" size="55"></td>
+            </tr>
+            <tr> 
+              <td>Editors</td>
+              <td colspan="2"><input type="text" name="issueEditors" id="issueEditors" size="55"></td>
+            </tr>
+            <tr> 
+              <td colspan="3"><A HREF="javascript:deleteSelectedIssues()"><IMG SRC="../images/buttons/button_remove.gif" border="0"/></A> 
+                <A HREF="javascript:editIssue()"><IMG SRC="../images/buttons/button_edit.gif" border="0"/></A> 
+                <A HREF="javascript:addIssue()"><IMG SRC="../images/buttons/button_new.gif" border="0"/></A> 
+              </td>
+            </tr>
+            <tr> 
+              <td></td>
+              <td ></A></td>
+              <td ><A HREF="javascript:editArticles()"><IMG SRC="../images/buttons/button_edit_articles.gif" border="0"/></A></td>
+            </tr>
+          </table>
+        </form>
+        <form name="delete_issues" id="delete_issues" action="manageIssues.php" method="post">
+          <input type="hidden" name="action" value="processDeleteIssues">
+          <div id="issuesToDeleteDiv"> </div>
+        </form>
+        <form name="edit_issue_form" id="edit_issue_form" action="manageIssues.php" method="post">
+          <input type="hidden" name="action" value="processEditIssue">
+          <div id="issueToEditDiv"> </div>
+        </form>
+        <form name="add_issue" id="add_issue" action="manageIssues.php" method="post">
+          <input type="hidden" name="action" value="processAddIssue">
+          <div id="issueToAddDiv"> </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- body_eof //-->
+</html>

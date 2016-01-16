@@ -1,0 +1,358 @@
+/* 
+	CSS Document
+
+	Copyright (c) 2004 Duke University
+  	Author: Justin Leonard
+  	Released under the GNU General Public License
+
+	
+	The main CSS style sheet which defines the layout for the Duke Grades website.
+	Classes defined include:
+	
+		title		:		The "JMEMS" title
+		header		:		Header bar for the title
+		main		:		The layer for positioning and containing the dynamic textual elements
+		maintext	:		The layer containing the main body text
+		ContentPane	:		The parent layer of the navigation and main areas		
+		Container	:		The parent layer of all the elements
+		footer		:		Footer information
+*/
+
+
+/*
+##################################################################################	
+	                     Main Positioning/Content Elements
+##################################################################################	
+*/
+
+#Title
+{
+	font-family: Arial;
+	font-size: 24px;
+	font-weight: bold;
+	color: white;
+	background: none;
+	z-index: 2;
+	position: absolute;	
+	left: 150px; 
+	top: 20px;
+			
+}
+
+
+#Title img
+{
+border-style: 0px solid;
+
+}
+
+#LinkHeader, #LinkHeader a:link, #LinkHeader a:active, #LinkHeader a:visited, #LinkHeader a:hover
+{
+	text-decoration: none;
+	cursor: hand;
+}
+
+#Header 
+{
+	background: black;
+	visibility: visible;
+	z-index: 101;
+	width: 800px;
+	height: 120px;
+	position: relative;
+	left: 0px;
+	top: 0px;
+	cursor: hand;
+	border-style: solid;
+	border-width: 0px 0px 0px 0px;
+	border-color:black;
+	overflow: hidden;
+}
+
+#Menu
+{
+height:20px;
+position: absolute;
+background: #222222;
+bottom: 0px;
+left:0px;
+width: 800px;
+border-style:solid;
+padding-left:154px;
+border-width: 1px 0px 1px 0px;
+border-bottom-color: black;
+border-top-color:gray;
+vertical-align: bottom;
+text-align:left;
+
+}
+
+#Menuitem
+{
+vertical-align: bottom;
+color: white;
+height: 20px;
+display: inline;
+margin:0px;
+padding-left:5px;
+
+} 
+
+#Menuitem img
+{
+vertical-align:bottom;
+align: right;
+border:none;
+padding-top:0px;
+padding-bottom:0px;
+margin:0px;
+}
+
+#Main
+{
+	text-align: left;
+	overflow: visible;
+	visibility: visible;
+	z-index: 0;
+	height:500px;
+	width: 800px;
+	font-family: Times New Roman, Times, serif;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: black;	
+	
+}
+
+#MainText
+{
+	font-family:  Helvetica, Arial, sans-serif;
+	font-size: 10pt;
+	position: absolute;
+	height: 500px;
+	width: 800px;
+	left: 0px;
+	top: 0px;
+	text-align: justify;
+	
+	color: black;
+	z-index: 9;
+	overflow-y: auto;
+	overflow-x: hidden;
+	overflow:-moz-scrollbars-vertical;
+	
+	text-decoration: none;
+}
+
+#MainTextHead
+{
+	position: absolute;
+	left: 272px;
+	top: 10px;
+	color: white;
+	font-family: Arial;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: bolder;
+	z-index: 9;
+	text-decoration: none;
+}
+
+#holder
+{
+	position:absolute;
+	left:20px;
+	top:15px;
+	width:750px;
+}
+
+TD {vertical-align: top; }
+
+#LeftPane, #Leftpane .table
+{
+	font-family: Arial, Times New Roman, Courier;
+	font-size: 16px;	
+	position: absolute;
+	width: 350px;
+	height: auto;	
+	left: 0px;
+	top: 0px;
+	overflow: visible;
+	color: black;
+	z-index: 9;
+	text-decoration: none;
+}
+
+#RightPane, #RightPane .table
+{
+	background-color: #FFEFD5;
+	font-family: Times New Roman, Arial, Courier;
+	font-size: 16px;
+	position: absolute;
+	width: 450px;
+	height: auto;	
+	left: 350px;
+	top: 0px;
+	overflow: visible;	
+	color: black;
+	z-index: 9;
+	text-decoration: none;
+}
+
+#IndentedLeft, #IndentedLeft .table
+{
+	padding-left: 75px;	
+}
+
+#IndentedTop, #IndentedTop .table
+{
+	padding-top: 50px;
+}
+
+#ContentPane
+{
+	width: 800px;
+	position: absolute;
+	left: 0px;
+	top: 120px;
+	z-index: 100;
+}
+
+body {
+margin: 0; 
+padding: 0;
+text-align: center; 
+background-color: #FFFFE0;
+}
+
+#Container
+{
+	width: 800px;
+	position: relative;
+	margin: 0 auto;
+	top:20px;
+	align: center;
+	text-align: left;
+	visibility: hidden;
+	z-index: 103;
+	background-color: #FFFFE0;
+	border-style: solid;
+	border-width:0px 1px 0px 1px;
+	border-color: black;	
+	text-align: left;
+}
+
+/*
+##################################################################################	
+    	              Main Specific Styles
+##################################################################################	
+*/
+
+#Main h5
+{
+	font-family: Times New Roman, Arial, Courier;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	display: inline;
+}
+
+#Main h1
+{
+	font-family: Arial, Courier;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: normal;
+	display: inline;
+}
+
+#Main h2
+{
+	font-family: Arial, Courier;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	display: inline;
+}
+
+#Main h3
+{
+	font-family: Arial, Courier;
+	font-size: 16px;
+	font-style: italic;
+	font-weight: normal;
+	text-decoration: none;
+	display: inline;
+}
+
+#Main h4
+{
+	font-family: Arial, Courier;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: bold;
+	display: inline;
+	color: white;
+}
+
+#Main h3 a:link, #MainText h3 a:active, #MainText h3 a:visited 
+{
+	color: white;
+	text-decoration: underline;
+}
+
+#Main h3 a:hover
+{
+	color: #E4E7B5;
+	text-decoration: underline;
+}
+
+#Main a:link, #MainText a:active, #MainText a:visited 
+{
+	color: black;
+}
+
+#Main a:hover
+{
+	color: black;
+}
+
+#Main .block
+{
+	line-height: 180%
+}
+
+#Main .heading
+{
+	color: white;
+	font-family: Arial;
+	text-decoration: none;
+	font-size: 18px;
+	font-weight: bolder;
+}
+
+.titleLabel
+{
+	font-family: Times New Roman, Arial, Courier;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.memberLabel
+{
+	font-family: Times New Roman, Arial, Courier;
+	text-decoration: none;
+	font-size: 16px;		
+	font-style: italic;
+	font-weight: normal;
+}
+
+.memberDepartment
+{
+	font-family: Times New Roman, Arial, Courier;
+	text-decoration: none;
+	font-size: 16px;		
+	font-style: normal;
+	font-weight: normal;
+}

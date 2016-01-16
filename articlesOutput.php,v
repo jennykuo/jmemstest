@@ -1,0 +1,97 @@
+head	1.3;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2011.03.29.13.34.35;	author root;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2011.03.29.13.32.12;	author root;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2011.03.29.13.23.54;	author root;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@took out debugging
+bjs
+@
+text
+@<?php
+/*
+  Copyright (c) 2004 Duke University
+  Author: Justin Leonard
+  Released under the GNU General Public License
+*/
+  	require('admin/includes/application_top.php');
+  	require('admin/includes/database.php');	
+
+	$issue_query = tep_db_query("SELECT * FROM issues WHERE ID='" . $_GET["id"] . "'");
+	$issue = tep_db_fetch_array($issue_query);
+	?>
+<TR>
+	<TD COLSPAN="2">
+		<span class="issueHeading"><?php echo $issue['Volume'] . "." . $issue['IssueNumber'] . " (" . $issue['IssueSeason'] . " " . $issue['Year'] . ")";?></span><BR>
+		<span class="issueTitle"><?php echo $issue['Title'];?></span><BR>
+		<span class="issueEditors"><?php echo $issue['Editors'];?></span>
+	</TD>
+</TR>
+<TR>
+	<TD></TD>
+	<TD></TD>	
+</TR>		
+<?php
+	
+	$articles = array();
+	$articles_query = tep_db_query("SELECT * FROM articles WHERE IssueID='" . $_GET["id"] . "' ORDER BY StartPage ASC");
+	while($thisArticle = tep_db_fetch_array($articles_query))
+		array_push($articles,$thisArticle);
+
+	foreach($articles as $article)
+	{ ?>
+		<TR>
+			<TD><span class="articlePages"><?php echo $article['StartPage'] . "-" . $article['EndPage'];?></span></TD>
+			<TD><span class="articleTitle"><A HREF="<?php if($article['Abstract']) { ?>javascript:popUp('abstract.php?article=<?php echo $article['ID'];?>')<?php } else echo "#";?>"><?php echo $article['Title'];?></A></span><BR>
+			<span class="articleAuthor"><?php echo $article['Author'];?></span><BR>
+			</TD>
+		</TR>
+<?php
+	}
+?>
+@
+
+
+1.2
+log
+@debugging
+bjs
+@
+text
+@a14 1
+	<?php echo "get ID = " . $_GET["id"];?>
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d15 1
+d42 1
+a42 1
+?>@
